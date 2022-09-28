@@ -1,0 +1,132 @@
+import axios from "axios";
+import React,{useState} from 'react';
+import styled from "styled-components";
+import { mobile } from "../responsive";
+import {useNavigate} from "react-router-dom"
+
+const Container = styled.div`
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(
+      rgba(255, 255, 255, 0.5),
+      rgba(255, 255, 255, 0.5)
+    ),
+    url("https://images.pexels.com/photos/6984661/pexels-photo-6984661.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940")
+      center;
+  background-size: cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const Wrapper = styled.div`
+  width: 40%;
+  padding: 20px;
+  background-color: white;
+  ${mobile({ width: "75%" })}
+`;
+
+const Title = styled.h1`
+  font-size: 24px;
+  font-weight: 300;
+`;
+
+const Form = styled.form`
+  display: flex;
+  flex-wrap: wrap;
+`;
+
+const Input = styled.input`
+  flex: 1;
+  min-width: 40%;
+  margin: 20px 10px 0px 0px;
+  padding: 10px;
+`;
+
+const Agreement = styled.span`
+  font-size: 12px;
+  margin: 20px 0px;
+`;
+
+const Button = styled.button`
+  width: 40%;
+  border: none;
+  padding: 15px 20px;
+  background-color: teal;
+  color: white;
+  cursor: pointer;
+`;
+
+const Register = () => {
+  const navigate = useNavigate(); 
+  const [isRegester, setIsRegester] = useState(false);
+ 
+  const [user, setUser] = useState({
+    name: "",
+    lastname:"",
+    username:"",
+    email:"",
+    password:"",
+    role:""
+
+  });
+
+  const clickHandler= (event)=>{
+     event.preventDefault();
+     axios.post("http://localhost:3000/api/auth/register", user);
+     setIsRegester(true);
+  }
+
+  function textFieldChange(e) {
+    setUser({ ...user, [e.target.name]: e.target.value })
+  }
+
+  return (
+    <Container>
+      <Wrapper>
+        <Title>CREATE AN ACCOUNT</Title>
+        <Form>
+          <Input
+            name="name"
+            onChange={(e) => textFieldChange(e)}
+            placeholder="name"
+          />
+          <Input
+            name="lastname"
+            onChange={(e) => textFieldChange(e)}
+            placeholder="last name"
+          />
+          <Input
+            name="username"
+            onChange={(e) => textFieldChange(e)}
+            placeholder="username"
+          />
+          <Input
+            name="email"
+            onChange={(e) => textFieldChange(e)}
+            placeholder="email"
+          />
+          <Input
+            name="password"
+            onChange={(e) => textFieldChange(e)}
+            placeholder="password"
+          />
+          <Input
+            name="role"
+            onChange={(e) => textFieldChange(e)}
+            placeholder="role"
+          />
+          <Agreement>
+            By creating an account, I consent to the processing of my personal
+            data in accordance with the <b>PRIVACY POLICY</b>
+          </Agreement>
+  
+          <Button onClick={clickHandler}>CREATE</Button>
+          {isRegester && navigate('/')}
+        </Form>
+      </Wrapper>
+    </Container>
+  );
+};
+
+export default Register;
